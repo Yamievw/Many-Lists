@@ -56,6 +56,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         }
         return false
     }
+    
+    // MARK: - State restoration
+    
+    func application(_ application: UIApplication, shouldSaveApplicationState coder: NSCoder) -> Bool {
+        return true
+    }
+    
+    func application(_ application: UIApplication, shouldRestoreApplicationState coder: NSCoder) -> Bool {
+        return true
+    }
 
 }
 

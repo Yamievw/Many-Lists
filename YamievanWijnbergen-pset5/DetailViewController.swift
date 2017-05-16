@@ -85,19 +85,6 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
         }
         tableView.reloadData()
     }
-    
-    @IBAction func checkBox(_ sender: UIButton) {
-        if sender.backgroundColor == .lightGray {
-            sender.backgroundColor = .white
-        }
-        else if sender.backgroundColor == .white {
-            sender.backgroundColor = .lightGray
-        }
-        else {
-            sender.backgroundColor = .white
-        }
-    }
-
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -139,7 +126,15 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
         }
-        tableView.reloadData()
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView.cellForRow(at: indexPath)?.accessoryType == UITableViewCellAccessoryType.checkmark {
+            tableView.cellForRow(at: indexPath)?.accessoryType = UITableViewCellAccessoryType.none
+        } else {
+            tableView.cellForRow(at: indexPath)?.accessoryType = UITableViewCellAccessoryType.checkmark
+        }
     }
 }
+
 

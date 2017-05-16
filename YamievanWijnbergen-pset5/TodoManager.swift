@@ -147,4 +147,27 @@ class TodoManager {
         return result
     }
     
+    func deleteItem(task: String, id: Int64) throws {
+        let deletedRows = todosTable.filter(todos == task)
+            
+            .filter(listid == id)
+        do {
+            try database!.run(deletedRows.delete())
+        } catch {
+            print("Unable to delete item: \(error)")
+        }
+    }
+    
+    func deleteList(name: String, id: Int64) throws {
+        let deletedList = listsTable.filter(lists == name)
+        
+        do {
+            try database!.run(deletedList.delete())
+            
+        } catch {
+            print("Unable to delete item: \(error)")
+            
+        }
+    }
 }
+

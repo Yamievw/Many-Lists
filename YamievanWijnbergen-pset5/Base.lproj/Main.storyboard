@@ -6,7 +6,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -56,33 +55,18 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="h1a-Qo-Y33">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="center" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="h1a-Qo-Y33">
                                                     <rect key="frame" x="15" y="0.0" width="384" height="43"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" name="BradleyHandITCTT-Bold" family="Bradley Hand" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GRz-tW-k58">
-                                                    <rect key="frame" x="380" y="12" width="19" height="19"/>
-                                                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="19" id="f8U-Gw-ndU"/>
-                                                        <constraint firstAttribute="width" constant="19" id="wtU-i4-BvK"/>
-                                                    </constraints>
-                                                    <connections>
-                                                        <action selector="checkBox:" destination="JEX-9P-axG" eventType="touchUpInside" id="bji-ky-q3o"/>
-                                                    </connections>
-                                                </button>
                                             </subviews>
-                                            <constraints>
-                                                <constraint firstItem="GRz-tW-k58" firstAttribute="trailing" secondItem="h1a-Qo-Y33" secondAttribute="trailing" id="9Uw-1J-9gm"/>
-                                                <constraint firstItem="GRz-tW-k58" firstAttribute="bottom" secondItem="sVx-lO-J1e" secondAttribute="bottomMargin" id="G0P-8C-N2v"/>
-                                            </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
-                                            <outlet property="checkBox" destination="GRz-tW-k58" id="Hdn-VX-Mfl"/>
+                                            <outlet property="itemLabel" destination="h1a-Qo-Y33" id="teA-U5-aCi"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -113,7 +97,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FJe-Yq-33r" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="707.24637681159425" y="127.98913043478262"/>
+            <point key="canvasLocation" x="708.69565217391312" y="208.69565217391306"/>
         </scene>
         <!--Split View Controller-->
         <scene sceneID="Nki-YV-4Qg">
@@ -186,7 +170,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SLD-UC-DBI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-45" y="129"/>
+            <point key="canvasLocation" x="-55" y="209"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
