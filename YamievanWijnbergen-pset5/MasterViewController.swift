@@ -8,17 +8,21 @@
 
 import UIKit
 
-let db = TodoManager.sharedInstance
-
 class MasterViewController: UITableViewController {
+    
+    let db = TodoManager.sharedInstance
 
     var detailViewController: DetailViewController? = nil
-    var objects = [Any]()
+    var objects = [List]()
 
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        appendNewList()
+        tableView.reloadData()
+        
         navigationItem.leftBarButtonItem = editButtonItem
 
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(newList(_:)))
@@ -39,49 +43,57 @@ class MasterViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    
 
     func newList(_ sender: Any) {
         // Make alert
-        let alertNewList = UIAlertController(title: "New list", message: "Enter a name", preferredStyle: .alert)
+        let alert = UIAlertController(title: "New list", message: "Enter a name", preferredStyle: .alert)
         
-        alertNewList.addTextField { (textField) in
+        alert.addTextField { (textField) in
             textField.text = ""
             textField.placeholder = "Type a name"
         }
         
-        alertNewList.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) in
-            let textField = alertNewList.textFields![0] as UITextField
-            print("Text field: \(textField.text)")
-            
-            // Use string in textfield to create new list
-            if textField.text == "" {
-                print("Error: fill in a name to create a new list")
-            }
-            else {
-                
-                if self.objects.contains(where: textField.text!) {
-                    print("Error: this list already exists")
+        alert.addAction(UIAlertAction(title: "Add list", style: .default, handler: { (_) in
+            let inputField = alert.textFields![0] as UITextField
+            if inputField.text != "" {
+                if globalArrays.listArray.contains(inputField.text!) {
+                    print("Enter a name for a new list")
+                } else {
+                    self.insertNewList(tableName: inputField.text!)
+                    self.appendNewList()
+                    self.tableView.reloadData()
+                    inputField.text = ""
                 }
-                else {
-//                    self.createList(todoListName: textField.text!)
-//                    self.read()
-//                    self.reloadTableView()
-                }
-                textField.text = ""
+            } else {
+                print("Enter a name for a list")
             }
         }))
-        self.present(alertNewList, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
     
+    func insertNewList(tableName: String) {
+        do {
+            try self.db.insertList(name: tableName)
+        } catch {
+            print(error)
+        }
+    }
     
+    func appendNewList() {
+        do {
+           objects = try db.appendLists()
+        } catch {
+            print(error)
+        }
+        tableView.reloadData()
+    }
 
     // MARK: - Segues
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showDetail" {
             if let indexPath = tableView.indexPathForSelectedRow {
-                let object = objects[indexPath.row] as! NSDate
+                let object = objects[indexPath.row]
                 let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
                 controller.detailItem = object
                 controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
@@ -103,8 +115,8 @@ class MasterViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
 
-        let object = objects[indexPath.row] as! NSDate
-        cell.textLabel!.text = object.description
+        let object = objects[indexPath.row]
+        cell.textLabel!.text = object.name
         return cell
     }
 

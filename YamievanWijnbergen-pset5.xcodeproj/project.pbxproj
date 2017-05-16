@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6C1DA1F51ECB225800893E15 /* ToDoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C1DA1F41ECB225800893E15 /* ToDoCell.swift */; };
 		6C24774D1EC5C19B00179385 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C24774C1EC5C19B00179385 /* AppDelegate.swift */; };
 		6C24774F1EC5C19B00179385 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C24774E1EC5C19B00179385 /* MasterViewController.swift */; };
 		6C2477511EC5C19B00179385 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2477501EC5C19B00179385 /* DetailViewController.swift */; };
@@ -70,6 +71,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6C1DA1F41ECB225800893E15 /* ToDoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToDoCell.swift; sourceTree = "<group>"; };
 		6C2477491EC5C19B00179385 /* YamievanWijnbergen-pset5.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "YamievanWijnbergen-pset5.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C24774C1EC5C19B00179385 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6C24774E1EC5C19B00179385 /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
@@ -115,6 +117,7 @@
 			children = (
 				6C84B7741EC5C73B000C5A23 /* SQLite.xcodeproj */,
 				6C24774C1EC5C19B00179385 /* AppDelegate.swift */,
+				6C1DA1F41ECB225800893E15 /* ToDoCell.swift */,
 				6C24774E1EC5C19B00179385 /* MasterViewController.swift */,
 				6C2477501EC5C19B00179385 /* DetailViewController.swift */,
 				6C84B7721EC5C439000C5A23 /* TodoManager.swift */,
@@ -275,6 +278,7 @@
 				6C84B7731EC5C439000C5A23 /* TodoManager.swift in Sources */,
 				6C24774F1EC5C19B00179385 /* MasterViewController.swift in Sources */,
 				6C24774D1EC5C19B00179385 /* AppDelegate.swift in Sources */,
+				6C1DA1F51ECB225800893E15 /* ToDoCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

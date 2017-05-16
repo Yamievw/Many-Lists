@@ -9,6 +9,21 @@
 import Foundation
 import SQLite
 
+struct globalArrays {
+    static var listArray = Array<String>()
+    static var itemArray = Array<String>()
+}
+
+struct List {
+    let id: Int64
+    let name: String
+}
+
+struct Item {
+    let id: Int64
+    let name: String
+}
+
 class TodoManager {
     
     static let sharedInstance = TodoManager()
@@ -67,8 +82,8 @@ class TodoManager {
     }
     
     // Insert items into database.
-    func insertItem() {
-        let insert = todosTable.insert(self.todos <- todos, self.listid <- listid)
+    func insertItem(name: String, id: Int64) {
+        let insert = todosTable.insert(self.todos <- name, self.listid <- id)
         
         do {
             let rowId = try database!.run(insert)
@@ -81,8 +96,8 @@ class TodoManager {
     }
     
     // Insert lists into database.
-    func insertList() {
-        let insert = listsTable.insert(self.lists <- lists)
+    func insertList(name: String) {
+        let insert = listsTable.insert(self.lists <- name)
         
         do {
             let rowId = try database!.run(insert)
@@ -94,14 +109,16 @@ class TodoManager {
     }
     
     // Append lists to array.
-    func appendLists() -> [String] {
-        var result = [String]()
+    func appendLists() -> [List] {
+        var result = [List]()
         
         do {
             result.removeAll()
             for list in try database!.prepare(listsTable) {
                 if list[lists].isEmpty != true {
-                    result.append(list[lists])
+                    let id = list[self.id]
+                    let name = list[lists]
+                    result.append(List(id: id, name: name))
                 }
             }
         } catch {
@@ -112,13 +129,15 @@ class TodoManager {
     }
     
     // Append items to array.
-    func appendItems() -> [String] {
-        var result = [String]()
+    func appendItems(list: List) -> [Item] {
+        var result = [Item]()
         do {
             result.removeAll()
-            for todo in try database!.prepare(todosTable) {
+            for todo in try database!.prepare(todosTable.filter(listid == list.id)) {
                 if todo[todos].isEmpty != true {
-                    result.append(todo[todos])
+                    let id =  todo[self.id]
+                    let name = todo[todos]
+                    result.append(Item(id: id, name: name))
                 }
             }
         } catch {
