@@ -15,7 +15,6 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
     var detailViewController: DetailViewController? = nil
     var objects = [Item]()
     
-
     @IBOutlet weak var detailDescriptionLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
 
@@ -35,11 +34,15 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
         
         configureView()
         
-        appendNewItem()
         tableView.reloadData()
         
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(newItem(_:)))
         navigationItem.rightBarButtonItem = addButton
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        appendNewItem()
     }
     
     func newItem(_ sender: Any) {
@@ -98,6 +101,7 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
         }
     }
     
+    // Create tableview.
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -108,7 +112,14 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let status = db.isCompleted(item: objects[indexPath.row])
         
+        if status == false {
+            cell.accessoryType = UITableViewCellAccessoryType.none
+        } else {
+            cell.accessoryType = UITableViewCellAccessoryType.checkmark
+        }
+
         let object = objects[indexPath.row]
         cell.textLabel!.text = object.name
         return cell
@@ -119,8 +130,10 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
         return true
     }
     
+    // Delete item from list.
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
+            db.deleteItem(item: objects[indexPath.row])
             objects.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
@@ -128,13 +141,54 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
         }
     }
     
+    // Checkmark.
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
         if tableView.cellForRow(at: indexPath)?.accessoryType == UITableViewCellAccessoryType.checkmark {
             tableView.cellForRow(at: indexPath)?.accessoryType = UITableViewCellAccessoryType.none
         } else {
             tableView.cellForRow(at: indexPath)?.accessoryType = UITableViewCellAccessoryType.checkmark
         }
+        
+//        var status = Bool()
+//        
+//        do {
+            let status = db.isCompleted(item: objects[indexPath.row])
+            print (status)
+            try! db.update(item: objects[indexPath.row], update: !status)
+//            status = db.isCompleted(item: objects[indexPath.row])
+//            print (status)
+//        } catch {
+//            print("error checking state")
+//        }
+//        
+//        if status == true {
+//            tableView.cellForRow(at: indexPath)?.accessoryType == UITableViewCellAccessoryType.checkmark
+//        } else {
+//            tableView.cellForRow(at: indexPath)?.accessoryType = UITableViewCellAccessoryType.none
+//        }
+//        tableView.reloadData()
+//        
     }
+    
+    override func encodeRestorableState(with coder: NSCoder) {
+        super.encodeRestorableState(with: coder)
+        
+        coder.encode(self.detailItem!.id, forKey: "list")
+    }
+    
+    override func decodeRestorableState(with coder: NSCoder) {
+        super.decodeRestorableState(with: coder)
+        
+        let lists = self.db.appendLists()
+        let list = lists.filter { (list) -> Bool in
+            return list.id == coder.decodeInt64(forKey: "list")
+        }
+        self.detailItem = list.first!
+    }
+
+
 }
 
 

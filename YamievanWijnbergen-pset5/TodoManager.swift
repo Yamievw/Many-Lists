@@ -22,6 +22,7 @@ struct List {
 struct Item {
     let id: Int64
     let name: String
+    let completed: Bool
 }
 
 class TodoManager {
@@ -33,6 +34,7 @@ class TodoManager {
     
     private let todos = Expression<String>("todos")
     private let id = Expression<Int64>("id")
+    private let todocompleted = Expression<Bool>("todocompleted")
     private let lists = Expression<String>("lists")
     private let listid = Expression<Int64>("listid")
     
@@ -63,6 +65,7 @@ class TodoManager {
                 t.column(todos)
                 t.column(id, primaryKey: .autoincrement)
                 t.column(listid)
+                t.column(todocompleted)
             } )
         } catch {
             print("Cannot create table: \(error)")
@@ -83,7 +86,7 @@ class TodoManager {
     
     // Insert items into database.
     func insertItem(name: String, id: Int64) {
-        let insert = todosTable.insert(self.todos <- name, self.listid <- id)
+        let insert = todosTable.insert(self.todos <- name, self.listid <- id, self.todocompleted <- false)
         
         do {
             let rowId = try database!.run(insert)
@@ -137,7 +140,7 @@ class TodoManager {
                 if todo[todos].isEmpty != true {
                     let id =  todo[self.id]
                     let name = todo[todos]
-                    result.append(Item(id: id, name: name))
+                    result.append(Item(id: id, name: name, completed: false))
                 }
             }
         } catch {
@@ -147,10 +150,9 @@ class TodoManager {
         return result
     }
     
-    func deleteItem(task: String, id: Int64) throws {
-        let deletedRows = todosTable.filter(todos == task)
-            
-            .filter(listid == id)
+    func deleteItem(item: Item) {
+        let deletedRows = todosTable.filter(id == item.id)
+
         do {
             try database!.run(deletedRows.delete())
         } catch {
@@ -158,8 +160,8 @@ class TodoManager {
         }
     }
     
-    func deleteList(name: String, id: Int64) throws {
-        let deletedList = listsTable.filter(lists == name)
+    func deleteList(list: List) {
+        let deletedList = listsTable.filter(id == list.id)
         
         do {
             try database!.run(deletedList.delete())
@@ -169,5 +171,35 @@ class TodoManager {
             
         }
     }
+    
+    // Check if item is completed or not.
+    func isCompleted(item: Item) -> Bool {
+        let query = todosTable.filter(id == item.id)
+        
+        do {
+            var state = Bool()
+            for user in try database!.prepare(query) {
+                state = user[self.todocompleted]
+            }
+            print("state is \(state)")
+            return state
+            
+        } catch {
+            print ("cant check if item is completed \(error)")
+        }
+        return true
+    }
+    
+    // Update status of item in row todoItem.
+    func update(item: Item, update: Bool) throws {
+        let updateItem = todosTable.filter(id == item.id)
+        
+        do {
+            try database!.run(updateItem.update(todocompleted <- update))
+            print("update:\(try database!.run(updateItem.update(todocompleted <- update)))")
+        } catch {
+            throw error
+        }
+    }
+    
 }
-

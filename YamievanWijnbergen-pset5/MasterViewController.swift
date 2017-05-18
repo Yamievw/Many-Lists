@@ -127,31 +127,12 @@ class MasterViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
+            db.deleteList(list: objects[indexPath.row])
             objects.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
         }
-    }
-    
-    // When the user quits the app encode state.
-    override func encodeRestorableState(with coder: NSCoder) {
-        
-        super.encodeRestorableState(with: coder)
-    }
-    
-    // When the user opens the app. Decode state.
-    override func decodeRestorableState(with coder: NSCoder) {
-        
-        super.decodeRestorableState(with: coder)
-    }
-}
-
-extension MasterViewController: UIViewControllerRestoration {
-    static func viewController(withRestorationIdentifierPath identifierComponents: [Any],
-                               coder: NSCoder) -> UIViewController? {
-        let vc = MasterViewController()
-        return vc
     }
 }
 
